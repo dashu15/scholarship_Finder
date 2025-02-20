@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Finder</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f2da;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .filter-section input,
+        .filter-section select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-section input:focus,
+        .filter-section select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .filter-section button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-section button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Scholarship List */
+        #scholarshipList {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        #scholarshipList li {
+            background-color: #d0cc9e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #scholarshipList li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        #scholarshipList h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+
+        #scholarshipList p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        #scholarshipList a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #scholarshipList a:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #scholarshipList {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .filter-section input,
+            .filter-section select,
+            .filter-section button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Scholarship Finder</h1>
+    <div class="filter-section">
+        <input type="text" id="searchInput" placeholder="Search by name...">
+        <select id="typeFilter">
+            <option value="">All Types</option>
+            <option value="merit">Merit-Based</option>
+            <option value="need">Need-Based</option>
+        </select>
+        <select id="deadlineFilter">
+            <option value="">All Deadlines</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+        </select>
+        <select id="eligibilityFilter">
+            <option value="">All Eligibility</option>
+            <option value="gpa">GPA-Based</option>
+            <option value="financial">Financial Need</option>
+        </select>
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="ALL">ALL</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="OBC">OBC</option>
+            <option value="GENERAL">GENERAL</option>
+        </select>
+        <select id="gender">
+         <option value="">GENDER</option>
+         <option value="ALL">ALL</option>
+         <option value="FEMALE">FEMALE</option>
+        </select>
+        <button class="clear-filters" onclick="clearFilters()">Clear Filters</button>
+    </div>
+    <ul id="scholarshipList"></ul>
+
+    <script>
+        const scholarships = [
+            {
+                name: "Mahadbt Scholarship",
+                type: "merit",
+                deadline: "2025-03-15",
+                eligibility: "gpa",
+                link: "https://mahadbt.maharashtra.gov.in/Login",
+                category: "ALL",
+                gender:"ALL"
+            },
+            {
+                name: "Cummins Scholarship",
+                type: "need",
+                deadline: "2025-04-01",
+                eligibility: "financial",
+                category: "ALL",
+                gender:"ALL",
+                link: "https://www.cummins.com/en/in/company/corporate-responsibility/global-impact/projects/higher-education/india-scholarship-program"
+            },
+            {
+                name: "Reliance Scholarship",
+                type: "merit",
+                deadline: "2025-02-28",
+                eligibility: "gpa",
+                gender:"ALL",
+                link: "https://www.scholarships.reliancefoundation.org/UG_Scholarship.aspx",
+                category: "{SC,ST,OBC}"
+            },
+            {
+                name: "Idfc First Bank Scholarship",
+                type: "merit",
+                deadline: "2025-02-15",
+                eligibility: "financial",
+                gender:"ALL",
+                link: "https://www.idfcfirstbank.com/csr-activities/educational-initiatives/engineering-scholarship-program",
+                category: "{ST,ST}"
+            },
+            {
+                name: "Prime Minister scholarship scheme",
+                type: "merit",
+                deadline: "2025-03-15",
+                eligibility: "financial",
+                gender:'ALL',
+                link: "https://www.desw.gov.in/prime-ministers-scholarship-scheme-pmss",
+                category: "{SC,ST,OBC}"
+            },
+            {
+                name: "Dr. Punjabrao Deshmukh hostel allowance scholarship",
+                type: "merit",
+                deadline: "2025-03-15",
+                eligibility: "financial",
+                gender:'ALL',
+                link: "https://mahadbt.maharashtra.gov.in/SchemeData/SchemeData?str=E9DDFA703C38E51AA5337B52CE309785#:~:text=Hostel%20maintenance%20allowance%20for%20student's,10months%20in%20a%20academic%20year).",
+                category: "{SC,ST,OBC}"
+            },
+            {
+                name: "AICTE – Pragati Scholarship Scheme For Girl Students",
+                type: "merit",
+                deadline: "2025-03-15",
+                eligibility: "GPA",
+                gender:'FEMALE',
+                link: "http://www.aicte-india.org/downloads/About%20the%20Scheme_ps_16.pdf",
+                category: "{SC,ST,OBC}"
+            },
+            {
+                name: "Rajarshri Chattrapati Shahu Mahraj scholarship ",
+                type: "merit",
+                deadline: "2025-03-15",
+                eligibility: "financial",
+                gender:'ALL',
+                link: "https://mahadbt.maharashtra.gov.in/SchemeData/SchemeData?str=E9DDFA703C38E51A4CECAB91C2B36920",
+                category: "GENERAL only."
+            },
+            {
+                name: "Government Research Adhichatra, Maharashtra 2024-25",
+                type: "merit",
+                deadline: "2025-04-15",
+                eligibility: "GPA",
+                gender:'ALL',
+                link: "https://mahadbt.maharashtra.gov.in/SchemeData/SchemeData?str=E9DDFA703C38E51AA7F7B18C7EA3C817",
+                category: "{SC,ST,OBC}"
+            },
+            {
+                name: "JK Tyre Shiksha Sarthi Scholarship Program 2024-25",
+                type: "need",
+                deadline: "2025-04-15",
+                eligibility: "GPA",
+                gender:'FEMALE',
+                link: "https://theglobalscholarship.org/scholarships/jk-tyre-shiksha-sarthi-scholarship?source=main",
+                category: "ALL"
+            }
+            
+        ];
+
+        // Function to display scholarships
+        function displayScholarships(filteredScholarships) {
+            const scholarshipList = document.getElementById("scholarshipList");
+            scholarshipList.innerHTML = "";
+
+            if (filteredScholarships.length === 0) {
+                scholarshipList.innerHTML = "<li>No scholarships found matching the criteria.</li>";
+                return;
+            }
+
+            filteredScholarships.forEach(scholarship => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <h3>${scholarship.name}</h3>
+                    <p>Type: ${scholarship.type === "merit" ? "Merit-Based" : "Need-Based"}</p>
+                    <p>Deadline: ${new Date(scholarship.deadline).toLocaleDateString()}</p>
+                    <p>Eligibility: ${scholarship.eligibility === "gpa" ? "GPA-Based" : "Financial Need"}</p>
+                    <p>Category: ${scholarship.category}</p>
+                    <p>Gender:${scholarship.gender}</p>
+                    <a href="${scholarship.link}" target="_blank">Apply Now</a>
+                `;
+                scholarshipList.appendChild(li);
+            });
+        }
+
+        // Function to filter scholarships
+        function filterScholarships() {
+            const searchText = document.getElementById("searchInput").value.toLowerCase();
+            const typeFilter = document.getElementById("typeFilter").value;
+            const deadlineFilter = document.getElementById("deadlineFilter").value;
+            const eligibilityFilter = document.getElementById("eligibilityFilter").value;
+            const categoryFilter = document.getElementById("categoryFilter").value;
+            const gender=document.getElementById('gender').value;
+
+            const filteredScholarships = scholarships.filter(scholarship => {
+                const matchesSearch = scholarship.name.toLowerCase().includes(searchText);
+                const matchesType = typeFilter ? scholarship.type === typeFilter : true;
+                const matchesEligibility = eligibilityFilter ? scholarship.eligibility === eligibilityFilter : true;
+                const matchesCategory = categoryFilter ? scholarship.category.includes(categoryFilter) : true;
+                const matchgend=gender ? scholarship.gender.includes(gender):true;
+
+                // Deadline filter logic
+                const currentDate = new Date();
+                const scholarshipDeadline = new Date(scholarship.deadline);
+                let matchesDeadline = true;
+                if (deadlineFilter === "upcoming") {
+                    matchesDeadline = scholarshipDeadline > currentDate;
+                } else if (deadlineFilter === "past") {
+                    matchesDeadline = scholarshipDeadline < currentDate;
+                }
+
+                return matchesSearch && matchesType && matchesEligibility && matchesDeadline && matchesCategory && matchgend;
+            });
+
+            displayScholarships(filteredScholarships);
+        }
+
+        // Function to clear all filters
+        function clearFilters() {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("typeFilter").value = "";
+            document.getElementById("deadlineFilter").value = "";
+            document.getElementById("eligibilityFilter").value = "";
+            document.getElementById("categoryFilter").value = "";
+            document.getElementById('gender').value="";
+            displayScholarships(scholarships);
+        }
+
+        // Event listeners for filters
+        document.getElementById("searchInput").addEventListener("input", filterScholarships);
+        document.getElementById("typeFilter").addEventListener("change", filterScholarships);
+        document.getElementById("deadlineFilter").addEventListener("change", filterScholarships);
+        document.getElementById("eligibilityFilter").addEventListener("change", filterScholarships);
+        document.getElementById("categoryFilter").addEventListener("change", filterScholarships);
+        document.getElementById('gender').addEventListener('change',filterScholarships);
+
+        // Initial display of all scholarships
+        displayScholarships(scholarships);
+    </script>
+</body>
+</html>
